@@ -9,7 +9,7 @@ __all__ = [
 ### IMAGE ###
 from matplotlib import pyplot as plt
 
-def display_image_list(imgage_list, name_list=None, save_path=None):
+def display_image_list(imgage_list, name_list=None, save_path=None, comment=None):
     '''Display a list of images'''
     if name_list is None:
         name_list = [f'Image {i+1}' for i in range(len(imgage_list))]
@@ -23,7 +23,12 @@ def display_image_list(imgage_list, name_list=None, save_path=None):
         axs[i].imshow(img, cmap='gray')
         axs[i].set_title(name_list[i])
         axs[i].axis('off')
-    plt.tight_layout()
+
+    if comment: # Add comment
+        plt.suptitle(comment)
+        
+    # plt.tight_layout() # Use this to adjust layout
+
     if not save_path:
         plt.show()
     else:
