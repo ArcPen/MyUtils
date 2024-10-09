@@ -7,8 +7,10 @@ __all__ = [
 
 
 ### IMAGE ###
-from matplotlib import pyplot as plt
 
+## Generate a list of images ##
+
+from matplotlib import pyplot as plt
 def display_image_list(imgage_list, name_list=None, save_path=None, comment=None):
     '''Display a list of images'''
     if name_list is None:
@@ -34,3 +36,53 @@ def display_image_list(imgage_list, name_list=None, save_path=None, comment=None
     else:
         plt.savefig(save_path)
     plt.close()
+
+## Generate color palette ##
+
+from matplotlib import pyplot as plt
+
+def RGB_to_Hex(rgb):
+    """
+    RGB格式颜色转换为16进制颜色格式
+    Args:
+        rgb: tuple
+
+    Returns:
+        color: str
+    """
+    RGB = list(rgb)
+    color = '#'
+    for i in RGB:
+        num = int(i)
+        color += str(hex(num))[-2:].replace('x', '0').upper()
+    return color
+    
+def generate_colors(N=12,colormap='hsv'):
+    """
+    生成颜色列表
+    Args:
+        N: 生成颜色列表中的颜色个数
+        colormap: plt中的色表 (https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html)
+
+    Returns:
+        rgb_list: list, 每个值(r,g,b)在0~255范围
+        hex_list: list, 每个值为十六进制颜色码类似：#FAEBD7
+    """
+    step = max(int(255/N),1)
+    cmap = plt.get_cmap(colormap)
+    rgb_list = []
+    hex_list = []
+    for i in range(N):
+        id = step*i # cmap(int)->(r,g,b,a) in 0~1
+        id = 255 if id>255 else id
+        rgba_color = cmap(id)
+        rgb = [int(d*255) for d in rgba_color[:3]]
+        rgb_list.append(tuple(rgb))
+        hex_list.append(RGB_to_Hex(rgb))
+    return rgb_list,hex_list
+    
+# 生成 6个冷色调的颜色
+rgb_list,hex_list = generate_colors(6,'cool')
+print(rgb_list)
+print(hex_list)
+
