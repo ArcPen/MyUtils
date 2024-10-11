@@ -38,7 +38,7 @@ def display_image_list(image_list, name_list=None, save_path=None, comment=None)
     plt.close()
 
 # another fancy way
-def display_image_matrix(image_list, ncols=3, save_path=None):
+def display_image_matrix(image_list, ncols=3, title=None, save_path=None):
     '''Display a list of images. With full resolution.
     args:
         image_list: 1D list of np arrays
@@ -48,6 +48,9 @@ def display_image_matrix(image_list, ncols=3, save_path=None):
         image_list.append(np.zeros_like(image_list[0]))
     stack_list = [np.hstack(image_list[i:i+ncols]) for i in range(0, len(image_list), ncols)]
     vis = np.vstack(stack_list)
+
+    if title:
+        cv2.putText(vis, img_path.name, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     if not save_path:
         display(PILImage.fromarray(vis))
