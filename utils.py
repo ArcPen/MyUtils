@@ -11,17 +11,17 @@ __all__ = [
 ## Generate a list of images ##
 
 from matplotlib import pyplot as plt
-def display_image_list(imgage_list, name_list=None, save_path=None, comment=None):
+def display_image_list(image_list, name_list=None, save_path=None, comment=None):
     '''Display a list of images'''
     if name_list is None:
-        name_list = [f'Image {i+1}' for i in range(len(imgage_list))]
+        name_list = [f'Image {i+1}' for i in range(len(image_list))]
     else:
-        if len(name_list) != len(imgage_list):
+        if len(name_list) != len(image_list):
             # add default names
-            name_list += [f'Image {i+1}' for i in range(len(imgage_list) - len(name_list))]
+            name_list += [f'Image {i+1}' for i in range(len(image_list) - len(name_list))]
 
-    fig, axs = plt.subplots(len(imgage_list), 1)#, figsize=(15, 10))
-    for i, img in enumerate(imgage_list):
+    fig, axs = plt.subplots(len(image_list), 1)#, figsize=(15, 10))
+    for i, img in enumerate(image_list):
         axs[i].imshow(img, cmap='gray')
         axs[i].set_title(name_list[i])
         axs[i].axis('off')
@@ -37,6 +37,23 @@ def display_image_list(imgage_list, name_list=None, save_path=None, comment=None
         plt.savefig(save_path)
     plt.close()
 
+# another fancy way
+def display_image_matrix(image_list, ncols=3, save_path=None):
+    '''Display a list of images. With full resolution.
+    args:
+        image_list: 1D list of np arrays
+    '''
+    ncols = 4
+    while not len(image_list) % ncols == 0:
+        image_list.append(np.zeros_like(image_list[0]))
+    stack_list = [np.hstack(image_list[i:i+ncols]) for i in range(0, len(image_list), ncols)]
+    vis = np.vstack(stack_list)
+
+    if not save_path:
+        display(PILImage.fromarray(vis))
+    else:
+        cv2.imsave(save_path, vis)
+        
 ## Generate color palette ##
 
 from matplotlib import pyplot as plt
